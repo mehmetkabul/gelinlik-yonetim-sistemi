@@ -1,0 +1,155 @@
+@model Gelinlik.Models.Class.HomeViewModel
+@{
+    ViewBag.Title = "Kira Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title">
+    <i class="fa-solid fa-calendar-check me-2"></i>Kira Listesi
+</div>
+
+<div class="modern-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Müşteri</th>
+                <th>Ürün</th>
+                <th>Kiralama Başlangıç</th>
+                <th>Kiralama Bitiş</th>
+                <th>Kapora</th>
+                <th>Teslim Durumu</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in Model.Rentals)
+            {
+                <tr>
+                    <td>@rental.id</td>
+                    <td><i>@(rental.Customer?.fullName ?? "Müşteri Bulunamadı")</i></td>
+                    <td><i>@(rental.Product?.name ?? "Ürün Bulunamadı")</i></td>
+                    <td>@rental.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@rental.EndDate.ToString("yyyy-MM-dd")</td>
+                    <td><span class="badge-currency">@rental.Deposit.ToString("C")</span></td>
+                    <td>
+                        @if (rental.IsReturned)
+                        {
+                            <span class="badge-modern badge-success-modern">
+                                <i class="fa-solid fa-check-circle me-1"></i> Teslim Edildi
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge-modern badge-warning-modern">
+                                <i class="fa-solid fa-clock me-1"></i> Teslim Edilmedi
+                            </span>
+
+                            @* Önce "Son Gün" kontrolü *@
+                            if (rental.EndDate.Date == DateTime.Now.Date)
+                            {
+                                <span class="badge-modern badge-warning-modern fade-badge ms-1" title="Bu kiralamanın bugün son günü.">
+                                    <i class="fa-solid fa-hourglass-half me-1"></i> Son Gün
+                                </span>
+                            }
+                            else if (rental.EndDate.Date < DateTime.Now.Date)
+                            {
+                                <span class="badge-modern badge-danger-modern fade-badge ms-1" title="Bu kiralama zamanında iade edilmedi.">
+                                    <i class="fa-solid fa-exclamation-triangle me-1"></i> Süresi Geçmiş
+                                </span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column align-items-center gap-2">
+
+                            <!-- İade Butonu veya Badge -->
+                            @if (!rental.IsReturned)
+                            {
+                                <a href="@Url.Action("ReturnRental", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-success btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-rotate-left me-1"></i> İade Et
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis px-3 py-2 rounded-pill w-75 text-center">
+                                    <i class="fa-solid fa-check me-1"></i> İade Edildi
+                                </span>
+                            }
+
+                            <!-- Güncelle -->
+                            @if (!rental.IsReturned)
+                            {
+                                <a href="@Url.Action("RentalFind", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-primary btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-regular fa-pen-to-square me-1"></i> Güncelle
+                                </a>
+                            }
+
+                            <!-- Süre Uzat -->
+                            @if (!rental.IsReturned)
+                            {
+                                <a href="@Url.Action("ExtendRental", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-warning btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-clock-rotate-left me-1"></i> Süre Uzat
+                                </a>
+                            }
+
+                            <!-- Sil -->
+                            @if (rental.IsReturned)
+                            {
+                                <a href="@Url.Action("ConfirmRemoveRental", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-danger btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-trash me-1"></i> Sil
+                                </a>
+                            }
+                            @if (rental.IsReturned)
+                            {
+                                <a href="@Url.Action("DamageReport", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-danger btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Hasar Bildir
+                                </a>
+                            }
+                            @if (string.IsNullOrEmpty(rental.BondPath))
+                            {
+                                <!-- Eğer senet yüklenmemişse -->
+                                <a href="@Url.Action("UploadNote", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-dark btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-upload me-1"></i> Senet Yükle
+                                </a>
+                            }
+                            else
+                            {
+                                <!-- Eğer senet varsa -->
+                                <a href="@Url.Action("ViewNote", "Rental", new { id = rental.id })" target="_blank"
+                                   class="btn btn-outline-info btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-eye me-1"></i> Seneti Görüntüle
+                                </a>
+
+                                <a href="@Url.Action("DeleteNote", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-danger btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-trash me-1"></i> Seneti Sil
+                                </a>
+
+
+                                <a href="@Url.Action("UploadNote", "Rental", new { id = rental.id })"
+                                   class="btn btn-outline-secondary btn-sm rounded-pill px-3 w-75">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i> Seneti Güncelle
+                                </a>
+                            }
+                            
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a href="@Url.Action("NewRental", "Rental")" class="btn btn-success update-btn">
+        <i class="fa-solid fa-plus me-1"></i>Kiralama Oluştur
+    </a>
+</div>

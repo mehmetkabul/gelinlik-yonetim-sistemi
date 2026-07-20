@@ -1,0 +1,88 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Ürün Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title">Ürün Listesi</div>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger shadow-sm p-3 mb-4 rounded">
+        <i class="fa-solid fa-circle-exclamation me-2"></i> @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success shadow-sm p-3 mb-4 rounded">
+        <i class="fa-solid fa-check-circle me-2"></i> @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="modern-table" >
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>İsim</th>
+                <th>Kategori</th>
+                <th>Açıklama</th>
+                <th>Stok</th>
+                <th>Satış</th>
+                <th>Kiralama</th>
+                <th>Uygunluk</th>
+                <th>Oluşturulma</th>
+                <th>Güncellenme</th>
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var x in Model.Products)
+            {
+                <tr>
+                    <td>@x.id</td>
+                    <td><strong>@x.name</strong></td>
+                    <td>@x.Category.categoryName</td>
+                    <td>@x.description</td>
+                    <td>@x.stock</td>
+                    <td>@x.price ₺</td>
+                    <td>@x.rentalPrice ₺</td>
+                    <td>
+                        <span class="badge @(x.isAvailable ? "badge-success" : "badge-danger")">
+                            @(x.isAvailable ? "Uygun" : "Uygun Değil")
+                        </span>
+                    </td>
+                    <td>@x.createdAt</td>
+                    <td>@x.updateAt</td>
+                    <td>
+                        <a href="~/Products/ProductsFind/@x.id" class="btn btn-sm btn-update action-button" title="Ürünü Güncelle">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);" onclick="confirmDelete('@x.id')" class="btn btn-sm btn-delete action-button" title="Ürünü Sil">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a href="~/Products/NewProducts/" class="btn btn-success update-btn">
+        <i class="fa-solid fa-plus me-1"></i> Yeni Ürün Ekle
+    </a>
+</div>
+
+<script>
+    function confirmDelete(productId) {
+        if (confirm("Bu ürünü silmek istediğinize emin misiniz?")) {
+            window.location.href = "/Products/ConfirmRemoveProduct/" + productId;
+        }
+    }
+</script>

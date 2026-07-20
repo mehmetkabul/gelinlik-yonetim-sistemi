@@ -1,0 +1,74 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Yeni Ürün Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title mb-4">
+        <i class="fa-solid fa-box-open me-2"></i>Ürün Ekle
+    </h2>
+
+    @using (Html.BeginForm("NewProducts", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-box me-1"></i>Ürün Adı</label>
+            @Html.TextBoxFor(x => x.Product.name, new { @class = "form-control", placeholder = "Ürün adını girin..." })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-layer-group me-1"></i>Ürün Kategori</label>
+            @Html.DropDownListFor(x => x.Product.CategoryId, new SelectList(Model.Categories, "id", "categoryName"), "Kategori Seçiniz", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-align-left me-1"></i>Ürün Açıklama</label>
+            @Html.TextBoxFor(x => x.Product.description, new { @class = "form-control", placeholder = "Açıklama girin..." })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-tags me-1"></i>Satış Fiyatı (₺)</label>
+            <input type="number" class="form-control" name="Product.price" min="0" step="0.01" value="@Model.Product.price" placeholder="Satış fiyatı..." />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-handshake me-1"></i>Kiralama Fiyatı (₺)</label>
+            <input type="number" class="form-control" name="Product.rentalPrice" min="0" step="0.01" value="@Model.Product.rentalPrice" placeholder="Kiralama fiyatı..." />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-boxes-stacked me-1"></i>Stok</label>
+            <input type="number" class="form-control" name="Product.stock" min="0" step="1" value="@Model.Product.stock" placeholder="Stok miktarı..." />
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="form-label d-block mb-2"><i class="fa-solid fa-check-double me-1"></i>Uygunluk</label>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="Product.isAvailable" value="true" @(Model.Product.isAvailable ? "checked" : "") />
+                <label class="form-check-label">Uygun</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="Product.isAvailable" value="false" @(!Model.Product.isAvailable ? "checked" : "") />
+                <label class="form-check-label">Uygun Değil</label>
+            </div>
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="form-label mb-1"><i class="fa-regular fa-clock me-1"></i>Oluşturulma Tarihi</label>
+            @Html.TextBoxFor(x => x.Product.createdAt, new
+            {
+                @id = "createdAt",
+                @class = "form-control",
+                @readonly = "readonly",
+                @Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            })
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success update-btn">
+                <i class="fa-solid fa-plus me-1"></i>Kaydet
+            </button>
+        </div>
+    }
+</div>

@@ -1,0 +1,20 @@
+﻿@model Gelinlik.Models.Class.Rental
+
+@{
+    ViewBag.Title = "Senet Yükle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Senet Yükle</h2>
+
+@using (Html.BeginForm("UploadNote", "Rental", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.id)
+
+    <div class="form-group">
+        <label>Senet Dosyası Seç</label>
+        <input type="file" name="noteFile" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Yükle</button>
+}

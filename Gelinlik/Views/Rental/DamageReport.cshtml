@@ -1,0 +1,29 @@
+﻿@model Gelinlik.Models.Class.Rental
+
+@{
+    ViewBag.Title = "Hasar Bildir";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-exclamation-triangle"></i> Hasar Bildirimi</h2>
+
+    @using (Html.BeginForm("SaveDamageReport", "Rental", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.Label("Hasar Detayı")
+            <textarea name="damageDetails" class="form-control" rows="4" placeholder="Hasar detayını giriniz..."></textarea>
+        </div>
+
+        <div class="form-group mt-3">
+            @Html.Label("Hasar Fotoğrafı Yükle")
+            <input type="file" name="damageImage" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-upload"></i> Hasar Kaydet
+        </button>
+    }
+</div>

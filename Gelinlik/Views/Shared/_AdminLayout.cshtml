@@ -1,0 +1,192 @@
+@{
+    Layout = null;
+}
+
+@{
+    var context = new Gelinlik.Models.Class.Context();
+    var settings = context.SiteSettings.FirstOrDefault();
+    ViewBag.LogoPath = settings?.LogoPath ?? "/web-images/logo.png";
+    ViewBag.CompanyName = settings?.CompanyName ?? "Rental Manager";
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/web-Admin/AdminSidebar.css">
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar d-flex justify-content-between align-items-center px-4 py-2 shadow-sm" style="background-color: #ffffff; border-bottom: 1px solid #eaeaea;">
+        <!-- Sol taraf: Logo + İsim -->
+        <div class="d-flex align-items-center">
+
+            <img src="@ViewBag.LogoPath" alt="Logo" style="height: 40px; border-radius: 8px;" class="me-2" />
+            <span class="fw-bold text-dark" style="font-size: 1.25rem;">@ViewBag.CompanyName</span>
+        </div>
+        <div class="sidebar-toggle-wrapper">
+            <button id="menu-toggle" class="menu-toggle d-md-none">
+                <i class="fas fa-bars text-white"></i>
+            </button>
+        </div>
+    </nav>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <ul class="nav-list">
+            @if (Session["UserRole"] != null && Session["UserRole"].ToString() == "Admin")
+            {
+                <!-- Sadece Adminler görebilir -->
+                <li>
+                    <a href="/Category/Index">
+                        <i class="fas fa-layer-group"></i>
+                        <span class="link_name ">Kategori Düzenleme</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/User/Index">
+                        <i class="fas fa-user-tie"></i>
+                        <span class="link_name ">Personel</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Settings/Edit">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="link_name">Ayarlar</span>
+                    </a>
+                </li>
+            }
+            <li>
+                <a href="/Admin/Index">
+                    <i class="fas fa-th-large"></i>
+                    <span class="link_name">Kontrol Paneli</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Customer/Index">
+                    <i class="fas fa-users"></i>
+                    <span class="link_name">Müşteriler</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Products/Index">
+                    <i class="fas fa-cube"></i>
+                    <span class="link_name">Ürünler</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Rental/Index">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="link_name">Kiralama İşlemleri</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Sales/Index">
+                    <i class="fas fa-tags"></i>
+                    <span class="link_name">Satış İşlemleri</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Appointment/Index">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="link_name">Randevu İşlemleri</span>
+                </a>
+            </li>
+            <li>
+                <a href="/CustomOrder/Index">
+                    <i class="fas fa-receipt"></i>
+                    <span class="link_name">Özel Dikim</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Rental/DamageReports">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span class="link_name">Hasar Kayıtları</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer mt-auto px-3 py-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="user-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                        @if (Session["UserRole"] != null)
+                        {
+                            var username = (string)Session["UserRole"];
+                            @username.Substring(0, 1).ToUpper()
+                        }
+                        else
+                        {
+                            @:"A"
+                        }
+                    </div>
+                    <div class="ml-2">
+                        <div class="font-weight-bold small">
+                            @if (Session["UserFullName"] != null)
+                            {
+                                @Session["UserFullName"]
+                            }
+                            else
+                            {
+                                @:"Admin User"
+                            }
+                        </div>
+                        <div class="text-muted small">
+                            @if (Session["UserRole"] != null)
+                            {
+                                @Session["UserRole"]
+                            }
+                            else
+                            {
+                                @:"Admin"
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a href="@Url.Action("LogOut", "Login")" class="btn btn-danger btn-sm ml-3">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <!-- Sayfa içeriği -->
+    <div class="main-content content">
+        @RenderBody()
+    </div>
+
+    <script src="~/web-Admin/sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/web-Admin/afk.js"></script>
+    <script src="~/web-Admin/admin.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @RenderSection("scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $('#menu-toggle').on('click', function () {
+                $('.sidebar').toggleClass('active');
+            });
+
+            $('.overlay').on('click', function () {
+                $('.sidebar').removeClass('active');
+                $(this).removeClass('active');
+            });
+
+        });
+    </script>
+</body>
+</html>

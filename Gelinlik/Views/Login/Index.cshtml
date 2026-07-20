@@ -1,0 +1,133 @@
+﻿@{
+    Layout = null;
+}
+@{
+    var context = new Gelinlik.Models.Class.Context();
+    var settings = context.SiteSettings.FirstOrDefault();
+    ViewBag.LogoPath = settings?.LogoPath ?? "/web-images/logo.png";
+    ViewBag.CompanyName = settings?.CompanyName ?? "Rental Manager";
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(145deg, #1d2b64, #f8cdda);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 40px;
+            width: 450px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            text-align: center;
+        }
+
+            .login-card img {
+                width: 120px;
+                margin-bottom: 20px;
+            }
+
+            .login-card h2 {
+                font-size: 28px;
+                margin-bottom: 20px;
+                color: #374151;
+                font-weight: bold;
+            }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s;
+        }
+
+            .form-control:focus {
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 0.2rem rgba(29, 78, 216, 0.25);
+            }
+
+        .btn-login {
+            background-color: #1d4ed8;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+            .btn-login:hover {
+                background-color: #2563eb;
+                transform: translateY(-2px);
+            }
+
+        .alert-danger {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .login-footer {
+            margin-top: 20px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+            .login-footer a {
+                color: #1d4ed8;
+                text-decoration: none;
+                font-weight: bold;
+            }
+
+                .login-footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="@ViewBag.LogoPath" alt="Logo">
+        <h2>@ViewBag.CompanyName <br /> Yönetim Paneli</h2>
+
+        @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+        {
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control" placeholder="Kullanıcı Adı" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control" placeholder="Şifre" required>
+            </div>
+            <button type="submit" class="btn btn-login"><i class="fa-solid fa-lock"></i> Giriş Yap</button>
+        }
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger mt-3">
+                <i class="fa-solid fa-exclamation-circle"></i> @ViewBag.ErrorMessage
+            </div>
+        }
+
+    <div class="login-footer">
+        © 2025 @ViewBag.CompanyName
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

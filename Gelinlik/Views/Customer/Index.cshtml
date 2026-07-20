@@ -1,0 +1,58 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Müşteri Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title">
+    <i class="fa-solid fa-users"></i> Müşteri Listesi
+</div>
+
+<div class="modern-table" >
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ad Soyad</th>
+                <th>E-Posta</th>
+                <th>Telefon</th>
+                <th>Adres</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Güncelleme Tarihi</th>
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var x in Model.Customers)
+            {
+                <tr>
+                    <td>@x.id</td>
+                    <td><strong>@x.fullName</strong></td>
+                    <td>@x.email</td>
+                    <td>@x.phone</td>
+                    <td>@x.address</td>
+                    <td>@x.createdAt</td>
+                    <td>@x.updateAt</td>
+                    <td>
+                        <a href="~/Customer/CustomerFind/@x.id" class="btn btn-sm btn-update action-button" title="Güncelle">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="~/Customer/RemoveCustomer/@x.id" class="btn btn-sm btn-danger action-button" title="Sil" onclick="return confirm('Bu müşteriyi silmek istediğinize emin misiniz?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a href="~/Customer/NewCustomer/" class="btn btn-success update-btn">
+        <i class="fa-solid fa-plus"></i> Yeni Müşteri Ekle
+    </a>
+</div>

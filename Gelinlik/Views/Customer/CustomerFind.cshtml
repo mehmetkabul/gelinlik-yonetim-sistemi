@@ -1,0 +1,44 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "CustomerFind";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-user-pen"></i> Müşteri Güncelle</h2>
+
+    @using (Html.BeginForm("UpdateCustomer", "Customer", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.Customer.id)
+
+        <div class="form-group">
+            @Html.Label("Ad Soyad")
+            @Html.TextBoxFor(model => model.Customer.fullName, new { @class = "form-control", placeholder = "Ad Soyad giriniz" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Eposta")
+            @Html.TextBoxFor(model => model.Customer.email, new { @class = "form-control", type = "email", placeholder = "example@mail.com" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Telefon")
+            @Html.TextBoxFor(model => model.Customer.phone, new { @class = "form-control", type = "tel", pattern = "[0-9]{10}", placeholder = "5XX-XXX-XX-XX" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Adres")
+            @Html.TextBoxFor(model => model.Customer.address, new { @class = "form-control", placeholder = "Adres bilgisi giriniz" })
+        </div>
+
+        <div class="form-group">
+            <label>Güncelleme Tarihi</label>
+            @Html.TextBoxFor(model => model.Customer.updateAt, new { @class = "form-control", @readonly = "readonly", @Value = Model.Customer.updateAt?.ToString("yyyy-MM-dd HH:mm:ss") })
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-check"></i> Güncelle
+        </button>
+    }
+</div>

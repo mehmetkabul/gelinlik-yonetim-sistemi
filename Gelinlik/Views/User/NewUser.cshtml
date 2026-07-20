@@ -1,0 +1,42 @@
+﻿@model Gelinlik.Models.Class.User
+
+@{
+    ViewBag.Title = "Yeni Personel Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-user-plus"></i> Yeni Personel Ekle</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    @using (Html.BeginForm("NewUser", "User", FormMethod.Post))
+    {
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> Ad Soyad</label>
+            @Html.TextBoxFor(x => x.FullName, new { @class = "form-control", placeholder = "Ad Soyad giriniz..." })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> Kullanıcı Adı</label>
+            @Html.TextBoxFor(x => x.Username, new { @class = "form-control", placeholder = "Kullanıcı Adı giriniz..." })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-lock"></i> Şifre</label>
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Şifre giriniz..." })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user-shield"></i> Rol</label>
+            @Html.DropDownListFor(x => x.Role, new SelectList(new[] { "Admin", "Personel" }), "Rol Seçiniz", new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-check"></i> Kaydet
+        </button>
+    }
+</div>

@@ -1,0 +1,70 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Kiralama Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title">
+        <i class="fa-solid fa-pen-to-square me-2"></i> Kiralama Güncelle
+    </h2>
+
+    @using (Html.BeginForm("UpdateRental", "Rental", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.Rental.id)
+
+        <div class="form-group mb-3">
+            <label class="form-label d-block mb-2"><i class="fa-solid fa-user me-1"></i> Müşteri Seç</label>
+            @Html.DropDownListFor(x => x.Rental.CustomerId,
+                new SelectList(Model.Customers, "Id", "FullName", Model.Rental.CustomerId),
+                new { @class = "form-control" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label d-block mb-2"><i class="fa-solid fa-box-open me-1"></i> Ürün Seç</label>
+            @if (Model.Products != null && Model.Products.Any())
+            {
+                @Html.DropDownListFor(x => x.Rental.ProductId,
+                    new SelectList(Model.Products, "Id", "name", Model.Rental.ProductId),
+                    new { @class = "form-control" })
+            }
+            else
+            {
+                <span class="text-danger">Kiralanabilir ürün bulunmamaktadır.</span>
+            }
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label d-block mb-2"><i class="fa-regular fa-calendar-days me-1"></i> Kiralama Başlangıç Tarihi</label>
+            @Html.TextBoxFor(x => x.Rental.StartDate, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label d-block mb-2"><i class="fa-solid fa-calendar-check me-1"></i> Kiralama Bitiş Tarihi</label>
+            @Html.TextBoxFor(x => x.Rental.EndDate, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label d-block mb-2"><i class="fa-solid fa-money-bill-wave me-1"></i> Kapora (₺)</label>
+            @Html.TextBoxFor(x => x.Rental.Deposit, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Kapora miktarını girin..." })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label d-block mb-2"><i class="fa-solid fa-box-check me-1"></i> Teslim Durumu</label>
+            <div class="form-check form-check-inline me-4">
+                <input type="radio" class="form-check-input" name="Rental.IsReturned" value="true" @(Model.Rental.IsReturned ? "checked" : "") id="teslimEdildi" />
+                <label class="form-check-label" for="teslimEdildi">Teslim Edildi</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="Rental.IsReturned" value="false" @(!Model.Rental.IsReturned ? "checked" : "") id="teslimEdilmedi" />
+                <label class="form-check-label" for="teslimEdilmedi">Teslim Edilmedi</label>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-success update-btn mt-3">
+            <i class="fa-solid fa-check me-1"></i> Güncelle
+        </button>
+    }
+</div>

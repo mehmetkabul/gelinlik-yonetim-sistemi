@@ -1,0 +1,39 @@
+﻿@model Gelinlik.Models.Class.User
+
+@{
+    ViewBag.Title = "Kullanıcı Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-user-edit"></i> Kullanıcı Güncelle</h2>
+
+    @using (Html.BeginForm("EditUser", "User", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> Ad Soyad</label>
+            @Html.TextBoxFor(x => x.FullName, new { @class = "form-control", placeholder = "Ad Soyad" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> Kullanıcı Adı</label>
+            @Html.TextBoxFor(x => x.Username, new { @class = "form-control", placeholder = "Kullanıcı Adı" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-lock"></i> Şifre</label>
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Şifre" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user-tag"></i> Yetki</label>
+            @Html.DropDownListFor(x => x.Role, (SelectList)ViewBag.Roles, new { @class = "form-control" })
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-check"></i> Güncelle
+        </button>
+    }
+</div>

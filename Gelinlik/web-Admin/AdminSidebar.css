@@ -1,0 +1,662 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: #f4f6f9;
+    color: #1f2937;
+    overflow-x: hidden;
+    padding-left: 0;
+    transition: all 0.3s ease;
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    height: 60px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1001;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+    .navbar .menu-toggle {
+        font-size: 22px;
+        color: #1f2937;
+        cursor: pointer;
+    }
+
+
+/* ===== Sidebar ===== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 240px;
+    background-color: #f8fafc;
+    border-right: 1px solid #e5e7eb;
+    padding-top: 60px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.03);
+    overflow-y: auto;
+}
+
+/* ===== Sidebar Header (Rental Manager) ===== */
+.sidebar-header {
+    text-align: center;
+    padding: 12px 16px;
+}
+
+    .sidebar-header h6 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1d4ed8;
+        margin: 0;
+    }
+
+/* Menü Listesi */
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .sidebar ul li {
+        margin-bottom: 8px;
+        padding: 0 16px;
+    }
+
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #374151;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            background-color: transparent;
+        }
+
+            .sidebar ul li a i {
+                font-size: 16px;
+                color: #64748b;
+                transition: color 0.2s ease;
+            }
+
+            .sidebar ul li a:hover {
+                background-color: #e0f2fe;
+                color: #1d4ed8;
+            }
+
+                .sidebar ul li a:hover i {
+                    color: #1d4ed8;
+                }
+
+            .sidebar ul li a.active {
+                background-color: #1d4ed8;
+                color: #ffffff;
+            }
+
+                .sidebar ul li a.active i {
+                    color: #ffffff;
+                }
+
+        /* ===== Dropdown (Alt Menü) - Updated Version ===== */
+        .sidebar ul li ul {
+            margin-top: 4px;
+            padding-left: 16px;
+            background-color: #f8fafc;
+            border: none;
+        }
+
+            .sidebar ul li ul li a {
+                padding: 10px 16px;
+                font-size: 14px;
+                color: #4b5563;
+                background-color: transparent;
+                border-radius: 8px;
+                transition: all 0.2s ease;
+            }
+
+                .sidebar ul li ul li a:hover {
+                    background-color: #e2e8f0;
+                    color: #1e40af;
+                }
+
+                .sidebar ul li ul li a.active {
+                    background-color: #c7d2fe;
+                    color: #1e3a8a;
+                }
+
+                .sidebar ul li ul li a i {
+                    font-size: 14px;
+                    color: #6b7280;
+                }
+
+
+/* ===== Sidebar Footer (Admin User) ===== */
+.sidebar-footer {
+    border-top: 1px solid #e5e7eb;
+    background-color: #f8fafc;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 12px 16px;
+}
+
+    .sidebar-footer .user-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    /* Dikey hizalama için */
+    .sidebar-footer .d-flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .sidebar-footer .ml-2 .font-weight-bold {
+        color: #111827;
+    }
+
+    .sidebar-footer .ml-2 .text-muted {
+        font-size: 12px;
+    }
+
+
+/* ===== Responsive Sidebar (Mobilde Aç/Kapat) ===== */
+@media (max-width: 768px) {
+    .sidebar {
+        left: -240px;
+    }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+    .navbar .menu-toggle {
+        display: block;
+    }
+}
+
+
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 80px 30px 30px 30px;
+    transition: all 0.3s ease;
+    z-index: 900;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        left: -260px;
+    }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+    .main-content {
+        margin-left: 0;
+        padding-top: 80px;
+    }
+
+        .main-content.overlay-active {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+}
+
+/* Section Title */
+.section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1f2937;
+    border-left: 4px solid #10b981;
+    padding-left: 12px;
+}
+
+/* Modern Table */
+.modern-table table {
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-collapse: collapse;
+}
+
+.modern-table th,
+.modern-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modern-table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.modern-table td {
+    color: #111827;
+    font-size: 14px;
+}
+
+.modern-table tr:hover {
+    background: #f3f4f6;
+}
+
+/* Modern Güncelle ve Sil Butonları */
+.btn-update,
+.btn-delete {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-update {
+    background-color: #4f46e5; /* Indigo */
+    color: white;
+}
+
+    .btn-update:hover {
+        background-color: #3730a3;
+    }
+
+.btn-delete {
+    background-color: #dc2626; /* Red */
+    color: white;
+}
+
+    .btn-delete:hover {
+        background-color: #991b1b;
+    }
+
+
+
+
+/* Action Buttons Container */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Panel Signature */
+.panel-sign {
+    color: #6b7280;
+    font-size: 14px;
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+}
+
+/* Scrollbar hidden */
+.sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@media screen and (min-width: 1000px) {
+    /* Mobil görünümde gösterilecek toggle ikonu */
+    .menu-toggle {
+        display: none;
+    }
+}
+
+
+    @media screen and (max-width: 768px) {
+        .menu-toggle {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            background-color: #1a1c23;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            position: fixed; /* absolute yerine fixed kullan */
+            top: 10px;
+            right: 20px;
+            z-index: 1101;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+    }
+
+
+    .update-btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 24px;
+        font-size: 15px;
+        font-weight: 500;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+        .update-btn:hover {
+            background-color: #43a047;
+            transform: translateY(-1px);
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        background-color: #f9fafb;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: none;
+    }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    select.form-control {
+        color: #111 !important;
+        padding: 10px;
+        height: 45px;
+        background: #fff;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+    /* Yeni Modern Badge */
+    .badge-modern {
+        display: inline-block;
+        padding: 6px 12px;
+        font-size: 13px;
+        border-radius: 20px;
+        font-weight: 500;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .badge-success-modern {
+        background-color: #e6f4ea;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    .badge-warning-modern {
+        background-color: #fff8e1;
+        color: #8c6d1f;
+        border: 1px solid #ffe082;
+    }
+
+    .badge-secondary-modern {
+        background-color: #f3f4f6;
+        color: #6b7280;
+        border: 1px solid #d1d5db;
+    }
+
+    .badge-currency {
+        background-color: #f1f5f9;
+        color: #111827;
+        padding: 6px 10px;
+        border-radius: 12px;
+        font-size: 13px;
+        border: 1px solid #e5e7eb;
+        font-weight: 500;
+    }
+
+    .btn-soft-disabled {
+        background-color: #f3f4f6;
+        color: #6b7280;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        cursor: not-allowed;
+    }
+
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border-radius: 6px;
+        padding: 6px 10px;
+    }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+    .btn-update {
+        background-color: #4c51bf;
+        color: white;
+        border-radius: 6px;
+        padding: 6px 10px;
+    }
+
+        .btn-update:hover {
+            background-color: #4338ca;
+        }
+
+    .form-check-input {
+        margin-right: 6px;
+        transform: scale(1.1);
+    }
+
+
+    .update-btn {
+        padding: 10px 24px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 14px;
+        transition: 0.3s ease;
+    }
+
+        .update-btn:hover {
+            background-color: #43a047;
+            color: white;
+        }
+
+    .text-gray-700 {
+        color: #4B5563;
+    }
+
+    .contact-form {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        padding: 30px;
+        margin: 40px auto;
+        max-width: 600px;
+        text-align: center;
+    }
+
+        .contact-form .btn {
+            min-width: 130px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .contact-form .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .contact-form .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .badge-modern {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .badge-success-modern {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .badge-warning-modern {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-danger-modern {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .fade-badge {
+        animation: pulseFade 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseFade {
+        0% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.6;
+            transform: scale(1.05);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .overdue-item:hover {
+        background-color: #fff8f8;
+        box-shadow: 0 2px 6px rgba(255, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-toggle-wrapper {
+        position: fixed;
+        bottom: 20px;
+        left: 240px; /* Sidebar genişliği kadar sola kaydır */
+        z-index: 1002;
+        transition: left 0.3s ease;
+    }
+
+    /* Sidebar kapanınca ikon da sola kayar */
+    .sidebar:not(.active) + .sidebar-toggle-wrapper {
+        left: 0;
+    }
+
+
+    /* Toggle buton */
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #1a1c23;
+        color: white !important;
+        border: none;
+        padding: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive - Sidebar kapalıyken sola kay */
+    @media (max-width: 768px) {
+        .sidebar-toggle-wrapper {
+            left: 0;
+        }
+
+        .sidebar.active + .sidebar-toggle-wrapper {
+            left: 240px;
+        }
+    }
+
+    .clean-scroll-box {
+        max-height: 400px;
+        overflow: auto;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        /* Bu satırlarla GPU rendering etkisi kaldırılıyor */
+        transform: none !important;
+        backface-visibility: visible !important;
+        will-change: auto !important;
+        -webkit-transform: none !important;
+    }

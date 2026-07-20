@@ -1,0 +1,42 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "NewCustomer";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-user-plus"></i> Müşteri Ekle</h2>
+
+    @using (Html.BeginForm("NewCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            @Html.Label("Ad Soyad")
+            @Html.TextBoxFor(x => x.Customer.fullName, new { @class = "form-control", required = "required", placeholder = "Ad Soyad giriniz..." })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("E-posta")
+            @Html.TextBoxFor(x => x.Customer.email, new { @class = "form-control", type = "email", placeholder = "example@mail.com", required = "required" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Telefon")
+            @Html.TextBoxFor(x => x.Customer.phone, new { @class = "form-control", type = "tel", pattern = "[0-9]{10}", placeholder = "5XX-XXX-XX-XX", required = "required" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Adres")
+            @Html.TextBoxFor(x => x.Customer.address, new { @class = "form-control", required = "required", placeholder = "Adres giriniz..." })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Tarih")
+            @Html.TextBoxFor(model => model.Customer.createdAt, "{0:yyyy-MM-dd HH:mm:ss}", new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-plus"></i> Ekle
+        </button>
+    }
+</div>

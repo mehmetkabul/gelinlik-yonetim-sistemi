@@ -1,0 +1,57 @@
+﻿@model Gelinlik.Models.Class.CustomOrder
+
+@{
+    ViewBag.Title = "Yeni Özel Dikim Talebi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-plus"></i> Yeni Özel Dikim Talebi</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    @using (Html.BeginForm("NewCustomOrder", "CustomOrder", FormMethod.Post))
+    {
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> Müşteri Seç</label>
+            @Html.DropDownListFor(x => x.CustomerId, (SelectList)ViewBag.Customers, "Müşteri Seçiniz", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-tags"></i> Kategori Seç</label>
+            @Html.DropDownListFor(x => x.ProductType, (SelectList)ViewBag.Categories, "Kategori Seçiniz", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-align-left"></i> Açıklama</label>
+            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = 4, placeholder = "Açıklama giriniz..." })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-regular fa-calendar"></i> Talep Tarihi</label>
+            @Html.TextBoxFor(x => x.RequestDate, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-calendar-days"></i> Termin Tarihi</label>
+            @Html.TextBoxFor(x => x.DeliveryDate, new { @class = "form-control", type = "date" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-coins"></i> Fiyat</label>
+            @Html.TextBoxFor(x => x.Price, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Fiyat giriniz" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-wallet"></i> Kapora</label>
+            @Html.TextBoxFor(x => x.Deposit, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Kapora giriniz" })
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-check"></i> Kaydet
+        </button>
+    }
+</div>

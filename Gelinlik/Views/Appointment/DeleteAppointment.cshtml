@@ -1,0 +1,17 @@
+﻿@model Gelinlik.Models.Class.Appointment
+
+@{
+    ViewBag.Title = "DeleteAppointment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Randevu Sil</h2>
+
+<p>Bu randevuyu silmek istediğinize emin misiniz?</p>
+
+@using (Html.BeginForm("ConfirmDelete", "Appointment", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Id)
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a href="@Url.Action("Index", "Appointment")" class="btn btn-secondary">İptal</a>
+}

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Gelinlik.Models.Class.Rental>
+
+@{
+    ViewBag.Title = "Hasar Kayıtları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title">
+    <i class="fa-solid fa-exclamation-triangle me-2"></i>Hasar Kayıtları
+</div>
+
+<div class="modern-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Müşteri</th>
+                <th>Ürün</th>
+                <th>Hasar Detayı</th>
+                <th>Bildiren Personel</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in Model)
+            {
+                <tr>
+                    <td>@rental.id</td>
+                    <td>@(rental.Customer?.fullName ?? "Müşteri Bulunamadı")</td>
+                    <td>@(rental.Product?.name ?? "Ürün Bulunamadı")</td>
+                    <td>@rental.DamageDetails</td>
+                    <td>@(rental.DamageReporter ?? "Belirtilmemiş")</td>
+                    <td>
+
+                        <a href="@Url.Action("DamageReportDetails", "Rental", new { id = rental.id })" class="btn btn-sm btn-info action-button" title="Detay Görüntüle">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+
+                        <a href="@Url.Action("ConfirmRemoveDamageReport", "Rental", new { id = rental.id })"
+                           class="btn btn-sm btn-delete action-button" title="Hasar Kaydını Sil">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function confirmDelete(id) {
+        if (confirm("Bu hasar kaydını silmek istediğinizden emin misiniz?")) {
+            $.post('@Url.Action("DeleteDamageReport", "Rental")', { id: id }, function (result) {
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert("Silme işlemi başarısız oldu.");
+                }
+            });
+        }
+    }
+</script>

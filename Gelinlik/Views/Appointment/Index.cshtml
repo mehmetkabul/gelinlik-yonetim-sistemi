@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Randevu Takvimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Randevu Takvimi</h2>
+<div class=" d-flex align-items-center gap-4 flex-wrap">
+    <div class="d-flex align-items-center gap-2 m-1">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background-color: #28a745; display: inline-block;"></span>
+        <span class="text-muted small ml-2">Tamamlandı</span>
+    </div>
+    <div class="d-flex align-items-center gap-2 m-1">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background-color: #ffc107; display: inline-block;"></span>
+        <span class="text-muted small ml-2">Beklemede</span>
+    </div>
+    <div class="d-flex align-items-center gap-2 m-1">
+        <span style="width: 14px; height: 14px; border-radius: 3px; background-color: #dc3545; display: inline-block;"></span>
+        <span class="text-muted small ml-2">İptal Edildi</span>
+    </div>
+</div>
+<div id="calendar"></div>
+
+
+
+@section scripts {
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'tr',
+                selectable: true,
+                selectMirror: true,
+                selectOverlap: false,
+
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+
+                buttonText: {
+                    today: 'Bugün',
+                    month: 'Ay',
+                    week: 'Hafta',
+                    day: 'Gün',
+                    list: 'Liste'
+                },
+
+                // Günlük/Haftalık görünümde saat aralığı seçilirse çalışır
+                select: function (info) {
+                    var selectedDate = info.startStr.split('T')[0];
+                    var selectedTime = info.startStr.split('T')[1] ? info.startStr.split('T')[1].substring(0, 5) : "";
+
+                    var url = '/Appointment/NewAppointment?selectedDate=' + selectedDate;
+                    if (selectedTime !== "") {
+                        url += '&selectedTime=' + selectedTime;
+                    }
+
+                    window.location.href = url;
+                },
+
+                // Sadece tarih seçilirse (gün görünümünde)
+                dateClick: function (info) {
+                    var selectedDate = info.dateStr.split('T')[0];
+                    var selectedTime = info.dateStr.split('T')[1] ? info.dateStr.split('T')[1].substring(0, 5) : "";
+
+                    var url = '/Appointment/NewAppointment?selectedDate=' + selectedDate;
+                    if (selectedTime !== "") {
+                        url += '&selectedTime=' + selectedTime;
+                    }
+
+                    window.location.href = url;
+                },
+
+
+                eventDidMount: function (info) {
+                    var tooltip = document.createElement("div");
+                    tooltip.className = "custom-tooltip";
+                    tooltip.innerText = info.event.title;
+
+                    document.body.appendChild(tooltip);
+
+                    info.el.addEventListener("mouseenter", function (e) {
+                        tooltip.style.display = "block";
+                        tooltip.style.opacity = 0;
+                        setTimeout(() => { tooltip.style.opacity = 1 }, 50);
+                    });
+
+                    info.el.addEventListener("mousemove", function (e) {
+                        tooltip.style.left = (e.pageX + 10) + "px";
+                        tooltip.style.top = (e.pageY + 10) + "px";
+                    });
+
+                    info.el.addEventListener("mouseleave", function () {
+                        tooltip.style.opacity = 0;
+                        setTimeout(() => { tooltip.style.display = "none"; }, 200);
+                    });
+                },
+
+                events: @Html.Raw(ViewBag.AppointmentEvents)
+            });
+
+            calendar.render();
+        });
+    </script>
+}
+
+
+
+
+
+<style>
+    .fc-event {
+        cursor: pointer !important;
+    }
+
+    .custom-tooltip {
+        position: absolute;
+        z-index: 9999;
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 14px;
+        pointer-events: none;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+        transition: opacity 0.3s ease-in-out;
+        display: none;
+        max-width: 300px;
+        white-space: normal;
+        font-family: 'Segoe UI', sans-serif;
+        animation: fadeInTooltip 0.4s ease-in-out;
+    }
+
+    @@keyframes fadeInTooltip {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+}

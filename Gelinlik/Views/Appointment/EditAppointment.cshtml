@@ -1,0 +1,54 @@
+﻿@model Gelinlik.Models.Class.Appointment
+
+@{
+    ViewBag.Title = "UpdateAppointment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Randevu Güncelle</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert alert-warning">@ViewBag.Message</div>
+}
+
+@using (Html.BeginForm("EditAppointment", "Appointment", FormMethod.Post))
+{
+    @Html.HiddenFor(x => x.Id)
+
+    <div class="form-group mb-3">
+        <label>Müşteri Seç</label>
+        @if (ViewBag.Customers != null)
+        {
+            @Html.DropDownListFor(x => x.CustomerId, (SelectList)ViewBag.Customers, "Müşteri Seçiniz", new { @class = "form-control" })
+        }
+        else
+        {
+            <p class="text-danger">Müşteri listesi yüklenemedi.</p>
+        }
+    </div>
+
+
+    <div class="form-group mb-3">
+        <label>Randevu Tarihi</label>
+        @Html.TextBoxFor(x => x.AppointmentDate, new { @class = "form-control", type = "date", @readonly = "readonly" })
+    </div>
+
+
+    <div class="form-group mb-3">
+        <label>Randevu Saati</label>
+        @Html.TextBoxFor(x => x.AppointmentTime, new { @class = "form-control", type = "time" })
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Durum</label>
+        @Html.DropDownListFor(x => x.Status, new SelectList(new List<SelectListItem>
+        {
+            new SelectListItem { Value = "Beklemede", Text = "Beklemede" },
+            new SelectListItem { Value = "Tamamlandı", Text = "Tamamlandı" },
+            new SelectListItem { Value = "İptal Edildi", Text = "İptal Edildi" }
+        }, "Value", "Text"), "Durum Seçiniz", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Güncelle</button>
+}

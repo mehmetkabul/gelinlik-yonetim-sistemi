@@ -1,0 +1,30 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Ürün Silme Onayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form text-center">
+    <h2 class="section-title text-danger">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i>Ürün Silme Onayı
+    </h2>
+
+    <p class="mb-3 fs-5 text-gray-700">
+        Bu ürünü silmek istediğinize emin misiniz?
+    </p>
+
+    <p class="text-muted mb-4">
+        <i class="fa-solid fa-circle-info me-1"></i>
+        Silme işlemi tüm kiralama ve satış geçmişini de kalıcı olarak silecektir.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="@Url.Action("RemoveProducts", "Products", new { id = ViewBag.ProductId })" class="btn btn-danger px-4">
+            <i class="fa-solid fa-trash-can me-1"></i>Evet, Sil
+        </a>
+        <a href="@Url.Action("Index", "Products")" class="btn btn-secondary px-4">
+            <i class="fa-solid fa-xmark me-1"></i>İptal
+        </a>
+    </div>
+</div>

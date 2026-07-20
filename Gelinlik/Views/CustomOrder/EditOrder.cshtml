@@ -1,0 +1,49 @@
+﻿@model Gelinlik.Models.Class.CustomOrder
+
+@{
+    ViewBag.Title = "Özel Dikim Güncelle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title"><i class="fa-solid fa-scissors"></i> Özel Dikim Güncelle</h2>
+
+    @using (Html.BeginForm("EditOrder", "CustomOrder", FormMethod.Post))
+    {
+        @Html.HiddenFor(x => x.id)
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> Müşteri Seç</label>
+            @Html.DropDownListFor(x => x.CustomerId, (SelectList)ViewBag.Customers, "Müşteri Seçiniz", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-tags"></i> Kategori Seç</label>
+            @Html.DropDownListFor(x => x.ProductType, (SelectList)ViewBag.Categories, "Kategori Seçiniz", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-align-left"></i> Açıklama</label>
+            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", rows = 4, placeholder = "Açıklama giriniz..." })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-coins"></i> Fiyat</label>
+            @Html.TextBoxFor(x => x.Price, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Fiyat giriniz" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-wallet"></i> Kapora</label>
+            @Html.TextBoxFor(x => x.Deposit, new { @class = "form-control", type = "number", step = "0.01", placeholder = "Kapora giriniz" })
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-calendar-days"></i> Termin Tarihi</label>
+            @Html.TextBoxFor(x => x.DeliveryDate, new { @class = "form-control", type = "date" })
+        </div>
+
+        <button type="submit" class="btn update-btn mt-3">
+            <i class="fa-solid fa-pen-to-square"></i> Güncelle
+        </button>
+    }
+</div>

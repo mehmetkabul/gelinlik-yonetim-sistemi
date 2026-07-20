@@ -1,0 +1,30 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Kategori Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title">
+        <i class="fa-solid fa-plus" style="margin-right: 6px; color: #4CAF50;"></i> Yeni Kategori Ekle
+    </h2>
+
+    @using (Html.BeginForm("NewCategory", "Category", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <label for="categoryName">Kategori Adı</label>
+            @Html.TextBoxFor(x => x.Category.categoryName, new
+            {
+                @class = "form-control",
+                placeholder = "Kategori adını giriniz"
+            })
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="update-btn">
+                <i class="fa-solid fa-check"></i> Kaydet
+            </button>
+        </div>
+    }
+</div>

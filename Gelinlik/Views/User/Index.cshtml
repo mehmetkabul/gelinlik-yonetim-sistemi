@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Gelinlik.Models.Class.User>
+
+@{
+    ViewBag.Title = "Personel Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title">
+    <i class="fa-solid fa-users"></i> Personel Listesi
+</div>
+
+<div class="modern-table " style="max-height: 400px; overflow: auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Bu satırlarla GPU rendering etkisi kaldırılıyor */ transform: none !important; backface-visibility: visible !important; will-change: auto !important; -webkit-transform: none !important;">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ad Soyad</th>
+                <th>Kullanıcı Adı</th>
+                <th>Rol</th>
+                <th>Güncelle</th>
+                <th>Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td><strong>@user.FullName</strong></td>
+                    <td>@user.Username</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <a href="@Url.Action("EditUser", "User", new { id = user.Id })" class="btn btn-sm btn-update action-button" title="Güncelle">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ConfirmRemoveUser", "User", new { id = user.Id })" class="btn btn-sm btn-danger action-button" title="Sil" >
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a href="~/User/NewUser/" class="btn btn-success update-btn">
+        <i class="fa-solid fa-plus"></i> Yeni Personel Ekle
+    </a>
+</div>

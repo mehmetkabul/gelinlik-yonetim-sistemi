@@ -1,0 +1,54 @@
+﻿@model Gelinlik.Models.Class.Rental
+
+@{
+    ViewBag.Title = "Hasar Detayı";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title mb-4">
+        <i class="fa-solid fa-file-alt me-2"></i>Hasar Detayı
+    </h2>
+
+    <div class="form-group mb-3">
+        <label class="form-label mb-1"><i class="fa-solid fa-user me-1"></i>Müşteri</label>
+        @Html.TextBox("CustomerFullName", Model.Customer?.fullName ?? "Müşteri Bulunamadı", new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label mb-1"><i class="fa-solid fa-box-open me-1"></i>Ürün</label>
+        @Html.TextBox("ProductName", Model.Product?.name ?? "Ürün Bulunamadı", new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label mb-1"><i class="fa-solid fa-file-lines me-1"></i>Hasar Detayı</label>
+        @Html.TextArea("DamageDetails", Model.DamageDetails, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label mb-1"><i class="fa-solid fa-user-pen me-1"></i>Hasar Bildiren</label>
+        @Html.TextBox("DamageReporter", Model.DamageReporter ?? "Bilinmiyor", new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label mb-1"><i class="fa-solid fa-image me-1"></i>Hasar Fotoğrafı (Büyütmek için resime tıklayın)</label>
+        @if (!string.IsNullOrEmpty(Model.DamageImagePath))
+        {
+            <div class="mb-3">
+                <a href="@Url.Content(Model.DamageImagePath)" target="_blank">
+                    <img src="@Url.Content(Model.DamageImagePath)" class="img-fluid rounded shadow-sm" alt="Hasar Fotoğrafı" style="max-width: 300px; cursor: pointer;" />
+                </a>
+            </div>
+        }
+        else
+        {
+            <p>Fotoğraf bulunamadı.</p>
+        }
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="@Url.Action("DamageReports", "Rental")" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i>Geri Dön
+        </a>
+    </div>
+</div>

@@ -1,0 +1,753 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    body {
+        background-color: #f0f2f5;
+    }
+
+    .dashboard-title h2 {
+        font-weight: bold;
+        color: #3b3b3b;
+    }
+
+    .dashboard-title p {
+        color: #6c757d;
+    }
+
+    .dashboard-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        cursor: pointer;
+        position: relative;
+    }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .dashboard-card h4 {
+            margin-bottom: 10px;
+            color: #6c757d;
+        }
+
+        .dashboard-card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3b3b3b;
+        }
+
+        .dashboard-card .icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 35px;
+            opacity: 0.3;
+        }
+
+    .section-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+    }
+
+    .auto-height {
+        height: auto !important;
+        min-height: unset !important;
+    }
+
+    .btn-filter, .btn-refresh {
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: #333;
+        transition: all 0.3s;
+    }
+
+        .btn-filter:hover, .btn-refresh:hover {
+            background-color: #f0f0f0;
+            color: #007bff;
+        }
+
+        .btn-refresh i {
+            transition: transform 0.6s;
+        }
+
+        .btn-refresh:hover i {
+            transform: rotate(360deg);
+        }
+
+    .quick-actions .btn {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        margin: 5px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background-color: white;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.3s;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+    }
+
+        .quick-actions .btn:hover {
+            background-color: #f0f0f0;
+            border-color: #007bff;
+            color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        .quick-actions .btn i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+    .activity-item {
+        transition: all 0.3s;
+    }
+
+        .activity-item:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+
+    .pagination a,
+    .pagination span {
+        padding: 6px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+        min-width: 35px;
+        text-align: center;
+    }
+
+    .pagination .active {
+        background-color: #007bff;
+        color: white !important;
+        border: 1px solid #007bff;
+    }
+
+    .pagination .btn {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+        .pagination .btn.disabled {
+            background-color: #eee;
+            color: #888;
+            pointer-events: none;
+            border: none;
+        }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .custom-pagination {
+        flex-wrap: wrap;
+        gap: 5px;
+        overflow-x: auto;
+        padding: 5px 0;
+    }
+
+        .custom-pagination .page-item .page-link {
+            min-width: 40px;
+            text-align: center;
+            border-radius: 6px;
+        }
+
+        .custom-pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .custom-pagination .page-item.disabled .page-link {
+            background-color: transparent;
+            border: none;
+            color: #999;
+            cursor: default;
+        }
+
+    .custom-dropdown-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .custom-dropdown {
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        background-color: #fff;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        appearance: none;
+        width: 160px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+    }
+
+        .custom-dropdown:hover {
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+        }
+
+        .custom-dropdown:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+    .dropdown-icon {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 14px;
+        color: #007bff;
+        transition: transform 0.3s ease;
+    }
+
+    .notification-item {
+        padding: 16px 24px;
+        transition: all 0.25s ease;
+        border-left: 4px solid transparent;
+        background-color: #fff;
+    }
+
+        .notification-item:hover {
+            background-color: #f5f5f5;
+            border-left: 4px solid #007bff;
+        }
+
+    .custom-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-radius: 14px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    .notification-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 16px;
+    }
+</style>
+
+<div class="dashboard-title mb-4">
+    <h2>Hoşgeldiniz, @Session["UserFullName"]!</h2>
+    <p>Kiralama işletmenizin genel görünümü.</p>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex align-items-center gap-3">
+        <div class="dropdown">
+            <button class="btn btn-filter dropdown-toggle" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Bugün
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                <li><a class="dropdown-item" href="javascript:void(0)" onclick="applyFilter('Today')">Bugün</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)" onclick="applyFilter('ThisWeek')">Bu Hafta</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)" onclick="applyFilter('ThisMonth')">Bu Ay</a></li>
+                <li><a class="dropdown-item" href="javascript:void(0)" onclick="applyFilter('ThisYear')">Bu Yıl</a></li>
+            </ul>
+        </div>
+
+        <button class="btn btn-refresh" onclick="refreshDashboard()">
+            <i class="fa-solid fa-rotate"></i> Yenile
+        </button>
+    </div>
+
+    <div class="quick-actions d-flex flex-wrap gap-3 mt-3">
+        <a href="@Url.Action("NewRental", "Rental")" class="btn">
+            <i class="fa-solid fa-truck"></i> Yeni Kiralama
+        </a>
+    </div>
+</div>
+
+<!-- Dashboard Kartları -->
+<div class="row gx-4 gy-4 mb-4">
+    <div class="col-md-3">
+        <div class="dashboard-card" style="border-left: 4px solid #4CAF50;">
+            <h4>Toplam Müşteri</h4>
+            <p>@ViewBag.TotalCustomers</p>
+            <i class="fa-solid fa-users icon" style="color: #4CAF50;"></i>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-card" style="border-left: 4px solid #FF9800;">
+            <h4>Mevcut Ürünler</h4>
+            <p>@ViewBag.AvailableProducts</p>
+            <i class="fa-solid fa-box icon" style="color: #FF9800;"></i>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-card" style="border-left: 4px solid #2196F3;">
+            <h4>Bugünün Randevuları</h4>
+            <p>@ViewBag.TodaysAppointments</p>
+            <i class="fa-solid fa-calendar-check icon" style="color: #2196F3;"></i>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="dashboard-card" style="border-left: 4px solid #9C27B0;">
+            <h4>Devam Eden Kiralamalar</h4>
+            <p>@ViewBag.ActiveRentals</p>
+            <i class="fa-solid fa-clock icon" style="color: #9C27B0;"></i>
+        </div>
+    </div>
+</div>
+<!-- Grafik -->
+<div class="section-card mb-4">
+    <h3 class="mb-4">İstatistiksel Dağılım</h3>
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+        <div class="d-flex flex-wrap mb-3">
+            <button class="btn btn-outline-primary dataTypeBtn active px-4 py-2 me-2" data-type="sales">
+                <i class="fa-solid fa-chart-line me-2"></i> Satış
+            </button>
+            <button class="btn btn-outline-success dataTypeBtn active px-4 py-2 me-2" data-type="rentals">
+                <i class="fa-solid fa-truck me-2"></i> Kiralama
+            </button>
+            <button class="btn btn-outline-warning dataTypeBtn active px-4 py-2" data-type="payments">
+                <i class="fa-solid fa-coins me-2"></i> Ödeme
+            </button>
+        </div>
+
+        <div class="d-flex align-items-center mt-3 mt-md-0 gap-3">
+            <div class="custom-dropdown-wrapper">
+                <select id="timeFilter" class="custom-dropdown">
+                    <option value="Today">Bugün</option>
+                    <option value="ThisWeek">Bu Hafta</option>
+                    <option value="ThisMonth" selected>Bu Ay</option>
+                    <option value="ThisYear">Bu Yıl</option>
+                </select>
+                <span class="dropdown-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <canvas id="statsChart" height="120"></canvas>
+</div>
+
+<!-- Bildirimler -->
+<div class="section-card mb-4 p-0 bg-white shadow-sm border-0 rounded-4 overflow-hidden">
+    <div class="d-flex align-items-center px-4 py-3 border-bottom bg-white rounded-top">
+        <i class="fa-solid fa-bell text-danger fs-5 me-2"></i>
+        <h5 class="mb-0 fw-semibold text-dark">Bildirimler</h5>
+        <span style="
+        background-color: #f8d7da;
+        color: #721c24;
+        font-size: 0.85rem;
+        padding: 2px 8px;
+        margin-left: 8px;
+        border-radius: 12px;
+        font-weight: 500;
+    ">
+            @(Model.DueTodayRentals.Count +
+  Model.OverdueRentals.Count +
+  Model.DueTomorrowRentals.Count +
+  Model.TodaysAppointments.Count +
+  Model.LowStockProducts.Count +
+  Model.RentalsWithoutBond.Count +
+  Model.PendingCustomOrders.Count) <!-- bu eklendi -->
+
+        </span>
+    </div>
+
+    <div style="max-height: 300px; overflow-y: auto;" class="custom-scroll bg-white">
+        @if (!Model.OverdueRentals.Any() &&
+             !Model.DueTomorrowRentals.Any() &&
+             !Model.TodaysAppointments.Any() &&
+             !Model.LowStockProducts.Any() &&
+             !Model.RentalsWithoutBond.Any())
+        {
+            <div class="text-center text-muted p-4">
+                <i class="fa-solid fa-circle-check me-2"></i> Şu an görüntülenecek bildirim yok.
+            </div>
+        }
+        else
+        {
+    <ul class="list-group list-group-flush">
+        @foreach (var item in Model.DueTodayRentals)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-info text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-hourglass-start"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@item.Customer.fullName</div>
+                    <small class="text-muted">Kiralama süresi bugün <strong>@item.EndDate.ToString("dd MMM yyyy")</strong> sona eriyor.</small>
+                </div>
+            </li>
+        }
+        @foreach (var item in Model.PendingCustomOrders)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-warning text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-scissors"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@item.CustomerName</div>
+                    <small class="text-muted">Özel dikim talebi onay bekliyor – Termin: <strong>@item.DeliveryDate.ToString("dd MMM yyyy")</strong></small>
+                </div>
+            </li>
+        }
+
+
+        @foreach (var item in Model.OverdueRentals)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-danger text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-clock"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@item.Customer.fullName</div>
+                    <small class="text-muted">Kiralama teslim tarihi <strong>@item.EndDate.ToString("dd MMM yyyy")</strong> geçti.</small>
+                </div>
+            </li>
+        }
+
+        @foreach (var item in Model.DueTomorrowRentals)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-warning text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@item.Customer.fullName</div>
+                    <small class="text-muted">Kiralama yarın <strong>@item.EndDate.ToString("dd MMM yyyy")</strong> sona eriyor.</small>
+                </div>
+            </li>
+        }
+
+        @foreach (var appt in Model.TodaysAppointments)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-primary text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@appt.Customer.fullName</div>
+                    <small class="text-muted">Randevu saati: <strong>@appt.AppointmentTime.ToString(@"hh\:mm")</strong></small>
+                </div>
+            </li>
+        }
+
+        @foreach (var product in Model.LowStockProducts)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-danger text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@product.name</div>
+                    <small class="text-muted">Stok azaldı – kalan: <strong>@product.stock</strong></small>
+                </div>
+            </li>
+        }
+
+        @foreach (var item in Model.RentalsWithoutBond)
+        {
+            <li class="list-group-item d-flex align-items-start notification-item rounded-3 my-2 mx-3 px-3 py-2 shadow-sm bg-light">
+                <span class="notification-icon bg-secondary text-white me-3 rounded-circle p-2 d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-file-alt"></i>
+                </span>
+                <div>
+                    <div class="text-dark fw-semibold">@item.Customer.fullName</div>
+                    <small class="text-muted">Senet eksik</small>
+                </div>
+            </li>
+        }
+
+    </ul>
+        }
+    </div>
+</div>
+
+
+<!-- Son Aktiviteler & Yaklaşan Randevular -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="section-card" style="height: 500px;">
+            <h3>Son Aktiviteler</h3>
+            <p class="text-muted">Son kiralama yönetim aktiviteleriniz</p>
+            <div class="activity-list" style="height: 380px; overflow-y: auto; padding: 10px;">
+                @if (Model.Activities != null && Model.Activities.Any())
+                {
+                    foreach (var activity in Model.Activities)
+                    {
+                        <div class="activity-item d-flex align-items-center mb-3 p-2 shadow-sm rounded" style="background-color: white;">
+                            <div class="me-3">
+                                <i class="fa-solid fa-circle" style="color: @(activity.Action == "Hasar Bildirimi" ? "#F44336" : activity.Action == "İade" ? "#4CAF50" : activity.Action == "Depozito" ? "#2196F3" : "#FFC107");"></i>
+                            </div>
+                            <div>
+                                <strong>@activity.PerformedBy</strong> - @activity.Details<br />
+                                <small class="text-muted">@activity.Date.ToString("dd MMM yyyy, HH:mm")</small>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center text-muted mt-5">Henüz bir aktivite yok.</div>
+                }
+            </div>
+            @if (ViewBag.TotalPages > 1)
+            {
+                var currentPage = ViewBag.CurrentPage;
+                var totalPages = ViewBag.TotalPages;
+
+                <nav class="mt-3 d-flex justify-content-center">
+                    <ul class="pagination custom-pagination">
+
+                        @if (currentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Index", "Admin", new { page = currentPage - 1, filter = ViewBag.Filter })">&laquo;</a>
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            if (i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1))
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" href="@Url.Action("Index", "Admin", new { page = i, filter = ViewBag.Filter })">@i</a>
+                                </li>
+                            }
+                            else if (i == currentPage - 2 || i == currentPage + 2)
+                            {
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            }
+                        }
+
+                        @if (currentPage < totalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("Index", "Admin", new { page = currentPage + 1, filter = ViewBag.Filter })">&raquo;</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="section-card d-flex flex-column justify-content-between" style="height: 500px;">
+            <div>
+                <h3>Yaklaşan Randevular</h3>
+                <p>Yakında planlanmış en yakın 5 randevu</p>
+                <div class="appointment-list" style="max-height: 380px; overflow-y: auto; padding: 10px;">
+                    @{
+                        var now = DateTime.Now;
+
+                        // RAM'e çekiyoruz çünkü TimeSpan ile birleşim DB'de yapılamaz
+                        var upcomingAppointments = Model.Appointments
+                            .ToList()
+                            .Select(appt => new
+                            {
+                                Appointment = appt,
+                                ExactDateTime = new DateTime(
+                                    appt.AppointmentDate.Year,
+                                    appt.AppointmentDate.Month,
+                                    appt.AppointmentDate.Day,
+                                    appt.AppointmentTime.Hours,
+                                    appt.AppointmentTime.Minutes,
+                                    0
+                                )
+                            })
+                            .Where(x => x.ExactDateTime >= now)
+                            .OrderBy(x => x.ExactDateTime)
+                            .Take(5)
+                            .ToList();
+                    }
+
+                    @if (upcomingAppointments.Any())
+                    {
+                        foreach (var item in upcomingAppointments)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-2 shadow-sm rounded" style="background-color: white;">
+                                <div>
+                                    <strong>@item.Appointment.Customer.fullName</strong><br />
+                                    <small>@item.ExactDateTime.ToString("dd MMM yyyy - HH:mm")</small>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted">Yaklaşan randevu bulunmamaktadır.</div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <a href="@Url.Action("Index", "Appointment")" class="btn btn-light w-100">Tüm Randevuları Görüntüle</a>
+    </div>
+
+
+
+
+</div>
+
+<!-- Hızlı İşlemler -->
+<div class="section-card auto-height mt-4 mb-4">
+    <h3>Hızlı İşlemler</h3>
+    <div class="quick-actions d-flex flex-wrap gap-3 mt-3">
+        <a href="@Url.Action("NewCustomer", "Customer")" class="btn">
+            <i class="fa-solid fa-user-plus"></i> Yeni Müşteri Ekle
+        </a>
+        <a href="@Url.Action("NewProducts", "Products")" class="btn">
+            <i class="fa-solid fa-box-open"></i> Yeni Ürün Ekle
+        </a>
+        <a href="@Url.Action("NewRental", "Rental")" class="btn">
+            <i class="fa-solid fa-file-contract"></i> Yeni Kiralama Oluştur
+        </a>
+        <a href="@Url.Action("NewAppointment", "Appointment")" class="btn">
+            <i class="fa-solid fa-calendar-plus"></i> Randevu Planla
+        </a>
+        <a href="@Url.Action("Index", "User")" class="btn">
+            <i class="fa-solid fa-users-cog"></i> Personel Yönetimi
+        </a>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Tüm Bildirimler</h5>
+                <i class="fa-solid fa-xmark btn-close" data-bs-dismiss="modal"></i>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @if (ViewBag.AllNotifications != null)
+                    {
+                        foreach (var notify in (List<string>)ViewBag.AllNotifications)
+                        {
+                            <li class="list-group-item">@notify</li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">Hiç bildirim yok.</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+    function applyFilter(filterValue) {
+        window.location.href = '@Url.Action("Index", "Admin")' + '?filter=' + filterValue;
+    }
+
+    function refreshDashboard() {
+        location.reload();
+    }
+   function updateChart() {
+    const selectedTypes = [];
+    document.querySelectorAll('.dataTypeBtn.active').forEach(btn => {
+        selectedTypes.push(btn.getAttribute('data-type'));
+    });
+
+    const filter = document.getElementById('timeFilter').value;
+
+    $.ajax({
+        url: '@Url.Action("GetChartData", "Admin")',
+        type: 'GET',
+        data: { types: selectedTypes, filter: filter },
+        traditional: true,
+        success: function (result) {
+            if (window.statsChartInstance) {
+                window.statsChartInstance.destroy();
+            }
+
+            const ctx = document.getElementById('statsChart').getContext('2d');
+
+            // Sabit renkler
+            const colorMap = {
+                "Satış": "#2196F3",
+                "Kiralama": "#4CAF50",
+                "Ödeme": "#FFC107"
+            };
+
+            window.statsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: result.labels,
+                    datasets: result.datasets.map(ds => ({
+                        label: ds.label,
+                        data: ds.data,
+                        backgroundColor: colorMap[ds.label] || '#999'
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        },
+        error: function () {
+            console.error("Grafik verisi alınamadı!");
+        }
+    });
+}
+
+// Butona tıklama ile aktif/pasif durumu
+document.querySelectorAll('.dataTypeBtn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        this.classList.toggle('active');
+        updateChart();
+    });
+});
+
+document.getElementById('timeFilter').addEventListener('change', function () {
+    updateChart();
+});
+
+updateChart();
+
+    </script>
+}

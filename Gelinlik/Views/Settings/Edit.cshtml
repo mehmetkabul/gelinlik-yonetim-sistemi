@@ -1,0 +1,49 @@
+﻿@model Gelinlik.Models.Class.Setting
+
+@{
+    ViewBag.Title = "Site Ayarları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title mb-4">
+        <i class="fa-solid fa-gear me-2"></i>Site Ayarları
+    </h2>
+
+    @using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-building me-1"></i>Şirket Adı</label>
+            @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", placeholder = "Şirket adı girin" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label mb-1"><i class="fa-solid fa-image me-1"></i>Logo Yükle</label>
+            <input type="file" name="logoFile" class="form-control" />
+        </div>
+
+        if (!string.IsNullOrEmpty(Model.LogoPath))
+        {
+            <div class="mb-3">
+                <a href="@Url.Content(Model.LogoPath)" target="_blank">
+                    <img src="@Url.Content(Model.LogoPath)" class="img-fluid rounded shadow-sm" alt="Logo" style="max-width: 200px; cursor: pointer;" />
+                </a>
+                <div class="mt-2">
+                    <a href="@Url.Action("DeleteLogo", "Settings")" class="btn btn-sm btn-outline-danger">
+                        <i class="fa-solid fa-trash me-1"></i>Logoyu Sil
+                    </a>
+                </div>
+            </div>
+        }
+
+        <button type="submit" class="btn btn-success mt-3">
+            <i class="fa-solid fa-floppy-disk me-1"></i>Kaydet
+        </button>
+    }
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="/Admin/Index" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i>Geri Dön
+        </a>
+    </div>
+</div>

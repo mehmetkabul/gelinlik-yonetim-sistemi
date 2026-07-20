@@ -1,0 +1,125 @@
+﻿@model List<Gelinlik.Models.Class.CustomOrder>
+
+@{
+    ViewBag.Title = "Özel Dikim Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title"><i class="fa-solid fa-scissors"></i> Özel Dikim Yönetimi</div>
+<p class="mb-3">Özel dikim taleplerini görüntüleyin, onaylayın veya reddedin.</p>
+
+<div class="modern-table mb-4">
+    <div class="section-title" style="border-color:#f59e0b;"><i class="fa-solid fa-hourglass-half"></i> Onay Bekleyen Talepler</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Müşteri</th>
+                <th>Ürün Türü</th>
+                <th>Açıklama</th>
+                <th>Termin</th>
+                <th>Fiyat</th>
+                <th>Kapora</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.PendingOrders as List<Gelinlik.Models.Class.CustomOrder>)
+            {
+                <tr>
+                    <td>@item.CustomerName</td>
+                    <td>@item.ProductType</td>
+                    <td>@item.Description</td>
+                    <td>@item.DeliveryDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td><span class="badge badge-success">@item.Deposit.ToString("C")</span></td>
+                    <td class="action-buttons">
+                        <a href="@Url.Action("ApproveOrder", new { id = item.id })" class="btn btn-success btn-sm"><i class="fa-solid fa-check"></i> Onayla</a>
+                        <a href="@Url.Action("RejectOrder", new { id = item.id })" class="btn btn-danger btn-sm"><i class="fa-solid fa-xmark"></i> Reddet</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="section-title"><i class="fa-solid fa-list"></i> Tüm Özel Dikim Talepleri</div>
+<div class="modern-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Müşteri</th>
+                <th>Ürün Türü</th>
+                <th>Talep Tarihi</th>
+                <th>Termin</th>
+                <th>Fiyat</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CustomerName</td>
+                    <td>@item.ProductType</td>
+                    <td>@item.RequestDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.DeliveryDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        @if (item.Status == "Onay Bekliyor")
+                        {
+                            <span class="badge badge-warning">Onay Bekliyor</span>
+                        }
+                        else if (item.Status == "Üretimde")
+                        {
+                            <span class="badge badge-purple">Üretimde</span>
+                        }
+                        else if (item.Status == "Reddedildi")
+                        {
+                            <span class="badge badge-danger">Reddedildi</span>
+                        }
+                        else if (item.Status == "Tamamlandı")
+                        {
+                            <span class="badge badge-success">Tamamlandı</span>
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        @if (item.Status == "Üretimde")
+                        {
+                            <a href="@Url.Action("EditOrder", "CustomOrder", new { id = item.id })" class="btn btn-primary btn-sm" title="Güncelle">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </a>
+                            <a href="/CustomOrder/CompleteOrder/@item.id" class="btn btn-success btn-sm" title="Tamamla">
+                                <i class="fa-solid fa-check-double"></i> Tamamla
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary btn-sm disabled" title="Güncelle" style="pointer-events: none; opacity: 0.6;">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </a>
+                            <a class="btn btn-success btn-sm disabled" title="Tamamla" style="pointer-events: none; opacity: 0.6;">
+                                <i class="fa-solid fa-check-double"></i> Tamamla
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a href="@Url.Action("NewCustomOrder")" class="btn update-btn mt-4">
+    <i class="fa-solid fa-plus"></i> Yeni Özel Dikim Talebi
+</a>
+
+<style>
+    .badge-purple {
+        background-color: #9b59b6;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        display: inline-block;
+    }
+</style>

@@ -1,0 +1,36 @@
+﻿@model Gelinlik.Models.Class.Appointment
+@{
+    ViewBag.Title = "Yeni Randevu Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Yeni Randevu Ekle</h2>
+
+@using (Html.BeginForm("NewAppointment", "Appointment", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>Müşteri Seç</label>
+        @Html.DropDownListFor(x => x.CustomerId, (SelectList)ViewBag.Customers, "Müşteri Seçiniz", new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Tarih</label>
+        <input type="date" name="AppointmentDate" class="form-control" value="@Model.AppointmentDate.ToString("yyyy-MM-dd")" readonly />
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label>Saat</label>
+        @Html.TextBoxFor(x => x.AppointmentTime, new { @class = "form-control", type = "time" })
+    </div>
+
+    <div class="form-group">
+        <label>Notlar</label>
+        @Html.TextAreaFor(x => x.Notes, new { @class = "form-control" })
+    </div>
+
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+}

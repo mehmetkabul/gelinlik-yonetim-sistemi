@@ -1,0 +1,99 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Yeni Satış Ekle";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="contact-form">
+    <h2 class="section-title mb-4">
+        <i class="fa-solid fa-cart-plus me-2"></i>Yeni Satış Ekle
+    </h2>
+
+    @if (!string.IsNullOrEmpty(ViewBag.StockError))
+    {
+        <div class="alert alert-danger">@ViewBag.StockError</div>
+    }
+
+    @using (Html.BeginForm("NewSale", "Sales", FormMethod.Post, new { id = "saleForm" }))
+    {
+        <div class="form-group mb-3">
+            <label class="form-label"><i class="fa-solid fa-user me-1"></i> Müşteri Seç</label>
+            @Html.DropDownListFor(x => x.Sale.CustomerId,
+                new SelectList(Model.Customers, "id", "FullName"),
+                "Müşteri Seçiniz",
+                new { @class = "form-control" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label"><i class="fa-solid fa-layer-group me-1"></i> Kategori Seç</label>
+            @Html.DropDownList("CategoryId",
+                new SelectList(Model.Categories, "id", "categoryName"),
+                "Kategori Seçiniz",
+                new { @class = "form-control", id = "categoryDropdown" })
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label"><i class="fa-solid fa-box-open me-1"></i> Ürün Seç</label>
+            <select id="productDropdown" name="Sale.ProductId" class="form-control">
+                <option value="">Önce kategori seçiniz</option>
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label"><i class="fa-solid fa-sort-numeric-up me-1"></i> Adet</label>
+            <input type="number" name="Sale.Quantity" class="form-control" min="1" value="1" required />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label"><i class="fa-solid fa-tags me-1"></i> Fiyat (₺)</label>
+            <input type="text" id="productPrice" class="form-control" placeholder="Fiyat bilgisi otomatik gelir" disabled />
+        </div>
+
+        <button type="submit" class="btn btn-success update-btn">
+            <i class="fa-solid fa-check-circle me-1"></i>Satışı Tamamla
+        </button>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("categoryDropdown").addEventListener("change", function () {
+            var categoryId = this.value;
+            var productDropdown = document.getElementById("productDropdown");
+
+            productDropdown.innerHTML = '<option value="">Ürün yükleniyor...</option>';
+
+            if (categoryId) {
+                fetch('/Sales/GetProductsByCategory?categoryId=' + categoryId)
+                    .then(response => response.json())
+                    .then(data => {
+                        productDropdown.innerHTML = '<option value="">Ürün Seçiniz</option>';
+                        data.forEach(product => {
+                            var option = document.createElement("option");
+                            option.value = product.id;
+                            option.text = product.name;
+                            option.setAttribute("data-price", product.price);
+                            productDropdown.appendChild(option);
+                        });
+
+                        if (data.length === 0) {
+                            productDropdown.innerHTML = '<option value="">Bu kategoride uygun ürün yok</option>';
+                        }
+                    })
+                    .catch(error => {
+                        productDropdown.innerHTML = '<option value="">Ürün yüklenirken hata oluştu</option>';
+                        console.error("Hata:", error);
+                    });
+            } else {
+                productDropdown.innerHTML = '<option value="">Önce kategori seçiniz</option>';
+            }
+        });
+
+        document.getElementById("productDropdown").addEventListener("change", function () {
+            var selectedOption = this.options[this.selectedIndex];
+            var price = selectedOption.getAttribute("data-price") || "";
+            document.getElementById("productPrice").value = price ? price + " ₺" : "";
+        });
+    });
+</script>

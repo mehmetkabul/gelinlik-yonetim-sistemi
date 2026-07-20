@@ -1,0 +1,46 @@
+﻿@model Gelinlik.Models.Class.HomeViewModel
+
+@{
+    ViewBag.Title = "Kategori Listesi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="section-title">Kategori Listesi</div>
+
+<div class="modern-table">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 10%;">ID</th>
+                <th style="width: 50%;">Kategori</th>
+                <th style="width: 20%;">Güncelle</th>
+                <th style="width: 20%;">Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var x in Model.Categories)
+            {
+                <tr>
+                    <td>@x.id</td>
+                    <td><strong>@x.categoryName</strong></td>
+                    <td>
+                        <a href="~/Category/CategoryFind/@x.id" class="btn btn-update" title="Kategori Güncelle">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="~/Category/RemoveCategory/@x.id" class="btn btn-delete" title="Kategori Sil" onclick="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?');">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3" style="margin-top: 20px;">
+    <a href="~/Category/NewCategory/" class="btn btn-add">
+        <i class="fa-solid fa-plus"></i> Yeni Kategori Ekle
+    </a>
+</div>
